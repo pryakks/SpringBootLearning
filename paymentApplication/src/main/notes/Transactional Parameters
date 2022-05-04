@@ -1,0 +1,73 @@
+@Transactional Parameters:
+
+readonly
+The @Transactional annotation offers the readOnly attribute, which is false by default.
+Generally, we use @Transactional(readOnly = true) for search or retrieval operation to make
+sure we can only perform the read-only operation.
+If we use @Transactional(readOnly = true) to a method which is performing save or update operation then
+we will not have newly created or updated record into the database but we will have the response data.
+or we can see the below error:
+ Connection is read-only. Queries leading to data modification are not allowed
+ @Transactional(readOnly = false),
+
+rollbackFor: to provide exception class
+   @Transactional(rollbackFor = {InsufficientBalanceException.class, Exception.class})
+
+isolation and propagation
+https://www.baeldung.com/spring-transactional-propagation-isolation
+
+Spring creates a proxy, or manipulates the class byte-code, to manage the creation, commit, and rollback
+of the transaction. In the case of a proxy, Spring ignores @Transactional in internal method calls.
+
+if we put the annotation on a private or protected method, Spring will ignore it without an error.
+
+propogation:
+REQUIRED => default => Spring checks if there is an active transaction, and if nothing exists, it creates a new one
+SUPPORTS => If a transaction exists, then the existing transaction will be used. If there isn't a transaction, it is executed non-transactional
+MANDATORY =>  If there is an active transaction, then it will be used. If there isn't an active transaction, then Spring throws an exception
+NEVER => Spring throws an exception if there's an active transaction
+NOT_SUPPORTED => If a current transaction exists, first Spring suspends it, and then the business logic is executed without a transaction
+REQUIRES_NEW => Spring suspends the current transaction if it exists, and then creates a new one
+NESTED =>  Spring checks if a transaction exists, and if so, it marks a save point. This means that if our business logic execution throws
+            an exception, then the transaction rollbacks to this save point. If there's no active transaction, it works like REQUIRED
+
+Dirty read, Nonrepeatable read, Phantom read
+
+Isolation:
+Isolation describes how changes applied by concurrent transactions are visible to each other.
+DEFAULT,
+READ_UNCOMMITTED => it suffers from all three mentioned concurrency side effects.
+READ_COMMITTED => prevents dirty reads
+REPEATABLE_READ =>prevents dirty, and non-repeatable reads.when we re-query for a row, we don't get a different result. However, in the re-execution of range-queries, we may get newly added or removed rows.
+SERIALIZABLE =>  it executes concurrent calls sequentially
+
+mistakes people do
+==========================================================================================================
+public void registerAccount(Account acc) {
+    createAccount(acc);
+  notificationSrvc.sendVerificationEmail(acc);
+}
+
+@Transactional
+public void createAccount(Account acc) {
+    accRepo.save(acc);
+    teamRepo.createPersonalTeam(acc);
+}
+
+In this case, when calling registerAccount(), saving the user and creating a team will not be performed
+in a common transaction. @Transactional is powered by Aspect-Oriented Programming.
+Therefore, processing occurs when a bean is called from another bean. In the example above,
+ the method is called from the same class so that no proxies can be applied.
+
+ to solve above:
+   @Lazy private final AccountService self;
+   self.createAccount(acc);
+
+   Spring boot provides concept of propagation with @Transactions. Propagation level decides that inner transaction should be part of same outer transaction or it should be different isolated one. By default propagation level is REQUIRED which means inner transaction will be part of same outer transaction, so if inner transaction fails whole transaction will get rollback.
+
+   Now its important to know that Rollback works for only Runtime exceptions by default.
+   For checked Exceptions you have to specify that explicitly @Transcations(rollbackFor = Exception.class)
+
+   Nested Transaction behaviour depends on @Transactional parameters.
+   For example - Use PROPAGATION_REQUIRES_NEW for create new transaction for nested methods with @Transactional.
+ ==========================================================================================================
