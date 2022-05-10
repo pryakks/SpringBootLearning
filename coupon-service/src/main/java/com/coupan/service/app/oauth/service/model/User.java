@@ -30,7 +30,7 @@ public class User {
 //        "firstName": "priya",
 //        "lastName": "priya",
 //        "email": "priya@gmail.com",
-//        "password": "$2a$10$DK6pAQo9a6QlPBLf/Q5FIew5SLfgWsXzYiKuGDb1Ip2GBBli03.S.",
+//        "password": "some password",
 //        "roles": [
 //        {
 //        "name": "ADMIN",
