@@ -2,10 +2,12 @@ package com.spring.security.controller;
 
 import com.spring.security.model.AuthenticationRequest;
 import com.spring.security.model.AuthenticationResponse;
+import com.spring.security.service.CustomUserDetailService;
 import com.spring.security.utility.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +23,7 @@ public class HomeResourceController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserDetailsService userDetailsService;
+    CustomUserDetailService userDetailsService;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -31,15 +33,15 @@ public class HomeResourceController {
         return "Hello World";
     }
 
-    @PostMapping("/authentication")
+    @PostMapping("/authenticate")
     public ResponseEntity createAuthenticationRequest(@RequestBody
                                                       AuthenticationRequest authenticationRequest) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword()));
-        } catch (Exception ex) {
-            throw new Exception("Incorrect Username or password");
+        } catch (BadCredentialsException ex) {
+            throw new Exception("Incorrect Username or password" ,ex);
         }
 
         final UserDetails userDetails =

@@ -26,6 +26,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+
 }
 
 tasks.named('test') {

@@ -1,4 +1,4 @@
-package com.coupan.service.app.oauth.service.model.Repository;
+package com.coupan.service.app.oauth.service.Repository;
 
 import com.coupan.service.app.oauth.service.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

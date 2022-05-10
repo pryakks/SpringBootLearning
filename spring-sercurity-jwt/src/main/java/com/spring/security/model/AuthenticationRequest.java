@@ -1,2 +1,17 @@
-package com.spring.security.model;public class AuthenticationRequest {
+package com.spring.security.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@AllArgsConstructor
+@Data
+@NoArgsConstructor
+public class AuthenticationRequest implements Serializable {
+
+    private String username;
+    private String password;
+
 }

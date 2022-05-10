@@ -1,4 +1,4 @@
-package com.spring.sercurity.oauth2.jwt.learning.config;
+package com.spring.sercurity.oauth2.jwt.learning.service;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
