@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Authorize User</h1>
+<a href="/callAuthorizedUrl" >Create Coupon</a>
+
+<div th:if="*{code!=null and #strings.length(code)>0}">
+    <b> Code: </b> <label th:text = "*{code}"/> <br>
+    <form th:action="@{/getAccessToken}">
+        <button type="submit" th:name="code" th:value="*{code}">Generate Token</button>
+    </form>
+</div>
+
+</body>
+</html>
