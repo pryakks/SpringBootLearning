@@ -23,9 +23,10 @@ jobs:
           distribution: 'adopt'
       - name: Build with Gradle
         working-directory: ./Docker/spring-with-docker
+        with:
+          target: "/build/libs/"
         run: gradle bootJar
 
 #        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          target: "/build/libs/"
+       
 
