@@ -22,24 +22,22 @@ jobs:
           java-version: '18'
           distribution: 'adopt'
       - name: Build with Gradle
-        working-directory: ./Docker/spring-with-docker
+        working-directory: ${{ secrets.WORKING_DIR }}
         run: | 
             gradle bootJar
             ls
         
       - uses: actions/upload-artifact@v1
-        working-directory: ./Docker/spring-with-docker
         with:
             name: spring-with-docker
-            path: /build/libs/
+            path: ${{ secrets.WORKING_DIR }}/build/libs/
             
       - uses: mr-smithers-excellent/docker-build-push@v5
-        working-directory: ./Docker/spring-with-docker
         with:
             name: Build & push Docker image
             image: ${{ secrets.DOCKER_USERNAME }}/docker-learning
             tags: latest
             registry: docker.io
-            dockerfile: Dockerfile
+            dockerfile: ${{ secrets.WORKING_DIR }}/Dockerfile
             username: ${{ secrets.DOCKER_USERNAME }}
             password: ${{ secrets.DOCKER_PASSWORD }}
