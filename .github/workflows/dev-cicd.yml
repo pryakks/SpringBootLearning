@@ -26,7 +26,8 @@ jobs:
         run: | 
             mkdir -p target/  
             gradle bootJar
-        uses: actions/upload-artifact@v1
+        
+      - uses: actions/upload-artifact@v1
         with:
             name: spring-with-docker
             path: target/
