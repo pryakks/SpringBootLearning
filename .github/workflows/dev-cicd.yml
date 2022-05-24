@@ -24,14 +24,13 @@ jobs:
       - name: Build with Gradle
         working-directory: ./Docker/spring-with-docker
         run: | 
-            mkdir -p target/  
             gradle bootJar
             ls
         
       - uses: actions/upload-artifact@v1
         with:
             name: spring-with-docker
-            path: ./Docker/spring-with-docker/target/
+            path: ./Docker/spring-with-docker/build/libs/
 
 
 
